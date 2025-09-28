@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metro Transport</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+</head>
+<body>
+    <div class="phone-container">
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <span class="time">4:31</span>
+            <div class="status-icons">
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content" id="content">
+            <!-- Explore Page (Default) -->
+            <div class="page active" id="explore-page">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search" class="search-input">
+                    <button class="schedule-btn"><span class="calendar-icon"></span> Schedule</button>
+                </div>
+                
+                <div class="map-container">
+                    <div class="map-placeholder">
+                        <div class="map-pin-icon"></div>
+                        <div class="location-markers">
+                            <span class="marker metro-icon"></span>
+                            <span class="marker bus-icon"></span>
+                            <span class="marker tram-icon"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <p><span class="parking-icon-small"></span> Park on blu stripes area</p>
+                    <p><span class="stop-icon"></span> We found rest stops near you.</p>
+                    <a href="#" class="link">View the rest areas</a>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn primary" onclick="showPage('buy-page')"><span class="ticket-icon-small"></span> Urban ticket</button>
+                    <button class="btn secondary"><span class="car-icon-small"></span> Call taxi</button>
+                </div>
+            </div>
+
+            <!-- Buy Page -->
+            <div class="page" id="buy-page">
+                <div class="page-header">
+                    <h2>Buy</h2>
+                    <div class="city-selector">
+                        <span>Napoli</span>
+                        <a href="#" class="change-city">Change city</a>
+                    </div>
+                </div>
+
+                <div class="suggested-section">
+                    <h3>Suggested for you</h3>
+                    <div class="ticket-card">
+                        <div class="ticket-logo">UNICO</div>
+                        <div class="ticket-info">
+                            <h4>URB. NAPOLI - ORARIO INTEGRATO</h4>
+                            <p>Valid for 90 minutes</p>
+                        </div>
+                        <button class="btn primary full-width">Buy</button>
+                    </div>
+                </div>
+
+                <div class="services-section">
+                    <h3>Services in the city</h3>
+                    <div class="service-grid">
+                        <div class="service-card">
+                            <span class="service-icon bus-service-icon"></span>
+                            <span>Public transport</span>
+                        </div>
+                        <div class="service-card">
+                            <span class="service-icon car-service-icon"></span>
+                            <span>Taxi</span>
+                            <span class="new-badge">New</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="plan-section">
+                    <h3>Plan a trip</h3>
+                    <div class="plan-card">
+                        <span class="plan-icon train-icon"></span>
+                        <span>Trains</span>
+                    </div>
+                </div>
+
+                <div class="compare-section">
+                    <a href="#" class="compare-link">Compare your travel solutions ></a>
+                </div>
+
+                <div class="parking-section">
+                    <h3>Move with your car</h3>
+                    <div class="parking-card">
+                        <span class="parking-icon parking-card-icon"></span>
+                        <div>
+                            <p>Park on blue</p>
+                            <p>stripes</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- My Tickets Page -->
+            <div class="page" id="tickets-page">
+                <div class="page-header">
+                    <h2>My tickets</h2>
+                </div>
+                
+                <div class="ticket-tabs">
+                    <button class="tab active">AVAILABLE</button>
+                    <button class="tab">EXPIRED</button>
+                </div>
+
+                <div class="active-tickets">
+                    <h3>Active tickets</h3>
+                    <div class="ticket-item" onclick="showPage('qr-page')">
+                        <div class="ticket-header">
+                            <span class="ticket-logo">UNICO</span>
+                            <span class="status active">Active</span>
+                        </div>
+                        <h4>ABB.STU- INT. UNICOCAMPANIA - per NAPOLI</h4>
+                        <div class="ticket-details">
+                            <p><span class="route-icon"></span> Route: NAPOLI - MERCOGLIANO</p>
+                            <p><span class="clock-icon"></span> Valid up to: 01/08/2026</p>
+                        </div>
+                        <div class="ticket-price">
+                            <span>Price</span>
+                            <span>0,00 €</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QR Code Page -->
+            <div class="page" id="qr-page">
+                <div class="qr-header">
+                    <button class="back-btn" onclick="showPage('tickets-page')">←</button>
+                    <h2>Active ticket</h2>
+                </div>
+
+                <div class="qr-ticket">
+                    <div class="ticket-info-header">
+                        <div class="ticket-logo">UNICO</div>
+                        <h3>ABB.STU- INT. UNICOCAMPANIA - per NAPOLI</h3>
+                        <p>ABB INTEGRATO STUDENTI REGIONE CAMPANIA TIC-SG-NAOD-00</p>
+                    </div>
+
+                    <div class="expandable-sections">
+                        <div class="section">
+                            <button class="section-header" onclick="toggleSection('card-info')">
+                                <span class="section-icon card-info-icon"></span>
+                                Card info
+                                <span class="arrow" id="card-info-arrow">▼</span>
+                            </button>
+                            <div class="section-content" id="card-info-content">
+                                <div class="card-info-details">
+                                    <div class="user-info">
+                                        <img src="https://via.placeholder.com/80x100/cccccc/666666?text=Photo" alt="User Photo" class="user-photo">
+                                        <div class="user-details">
+                                            <h4>FAUZAN EJAZ</h4>
+                                            <p class="user-id">JZEFZN99T24Z222G</p>
+                                            <div class="card-details">
+                                                <p><strong>Card no.</strong></p>
+                                                <p>2000695522</p>
+                                                <p><strong>Expiry date:</strong></p>
+                                                <p>31/07/2026</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <button class="section-header" onclick="toggleSection('control-validation')">
+                                <span class="section-icon validation-icon"></span>
+                                Control and validation
+                                <span class="arrow" id="control-validation-arrow">▼</span>
+                            </button>
+                            <div class="section-content" id="control-validation-content">
+                                <div class="qr-container">
+                                    <div id="qr-code"></div>
+                                    <div class="qr-overlay" id="qr-overlay" style="display: none;">
+                                        <button class="create-new-btn" onclick="return false;">Create new</button>
+                                    </div>
+                                </div>
+                                <div class="qr-info">
+                                    <div class="qr-time-row">
+                                        <span class="time-display"><span class="time-icon"></span> <span id="current-time">21:04:04</span></span>
+                                        <span class="ticket-number"><span class="lock-icon"></span> <span id="ticket-id">102</span></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="animated-pattern">
+                        <div class="triangle-row row1">
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                        </div>
+                        <div class="triangle-row row2">
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                        </div>
+                        <div class="triangle-row row3">
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                            <div class="triangle"></div>
+                        </div>
+                    </div>
+
+                    <div class="route-info">
+                        <div class="route-bar"></div>
+                        <div class="route-details">
+                            <div class="route-text">From NAPOLI to MERCOGLIANO</div>
+                            <div class="validity-text">Valid from 16/09/2025 to 01/08/2026</div>
+                        </div>
+                    </div>
+
+                    <div class="issued-info">
+                        <div class="issued-label">Issued on:</div>
+                        <div class="issued-date" id="issue-date">16/09/2025 - 11:08</div>
+                    </div>
+
+                    <div class="ticket-details-section">
+                        <div class="detail-row price-row">
+                            <span class="detail-label">Price</span>
+                            <span class="detail-value price">0,00 €</span>
+                        </div>
+                        
+                        <div class="details-expandable">
+                            <div class="details-header">
+                                <span class="details-title">Details</span>
+                                <span class="read-all">Read all ▼</span>
+                            </div>
+                            <div class="details-content">
+                                <div class="detail-row">
+                                    <span class="detail-label">Ticket code:</span>
+                                    <span class="detail-value">2000W/2693395</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">PNR:</span>
+                                    <span class="detail-value">XNJFXZDHE9</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn transfer">Transfer ticket</button>
+                </div>
+            </div>
+
+            <!-- Vehicles Page -->
+            <div class="page" id="vehicles-page">
+                <div class="page-header">
+                    <h2>Vehicles</h2>
+                </div>
+                
+                <div class="empty-state">
+                    <div class="empty-icon vehicle-empty-icon"></div>
+                    <h3>No registered vehicles found</h3>
+                    <p>To use this service you must register the data of a vehicle.</p>
+                    <button class="btn primary"><span class="plus-icon"></span> Add vehicle</button>
+                </div>
+            </div>
+
+            <!-- Profile Page -->
+            <div class="page" id="profile-page">
+                <div class="page-header">
+                    <h2>Profile</h2>
+                </div>
+
+                <div class="profile-info">
+                    <div class="profile-avatar">
+                        <img src="https://via.placeholder.com/60" alt="Profile" class="avatar">
+                    </div>
+                    <div class="profile-details">
+                        <h3>Fauzan Ejaz</h3>
+                        <a href="#" class="edit-profile">Edit profile</a>
+                    </div>
+                    <div class="qr-icon phone-icon"></div>
+                </div>
+
+                <div class="credit-section">
+                    <div class="credit-info">
+                        <span class="credit-icon credit-card-icon"></span>
+                        <div>
+                            <p>Available credit</p>
+                            <p class="credit-amount">0.00 €</p>
+                        </div>
+                        <a href="#" class="top-up">Top-up ></a>
+                    </div>
+                </div>
+
+                <div class="menu-section">
+                    <h3>Services</h3>
+                    <div class="menu-item">
+                        <span class="menu-icon parking-menu-icon"></span>
+                        <span>Parking settings</span>
+                        <span class="arrow">></span>
+                    </div>
+                    <div class="menu-item">
+                        <span class="menu-icon ticket-menu-icon"></span>
+                        <span>Transport cards</span>
+                        <span class="arrow">></span>
+                    </div>
+                </div>
+
+                <div class="menu-section">
+                    <h3>Management</h3>
+                    <div class="menu-item">
+                        <span class="menu-icon star-icon"></span>
+                        <span>My favourites</span>
+                        <span class="arrow">></span>
+                    </div>
+                    <div class="menu-item">
+                        <span class="menu-icon payment-icon"></span>
+                        <span>Payment methods</span>
+                        <span class="arrow">></span>
+                    </div>
+                    <div class="menu-item">
+                        <span class="menu-icon list-icon"></span>
+                        <span>List of movements</span>
+                        <span class="arrow">></span>
+                    </div>
+                </div>
+
+                <div class="menu-section">
+                    <div class="menu-item">
+                        <span class="menu-icon globe-icon"></span>
+                        <span>Language</span>
+                        <span class="arrow">></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <button class="nav-item active" onclick="showPage('explore-page')">
+                <span class="nav-icon"></span>
+                <span class="nav-label">Explore</span>
+            </button>
+            <button class="nav-item" onclick="showPage('buy-page')">
+                <span class="nav-icon"></span>
+                <span class="nav-label">Buy</span>
+            </button>
+            <button class="nav-item" onclick="showPage('tickets-page')">
+                <span class="nav-icon"></span>
+                <span class="nav-label">My tickets</span>
+            </button>
+            <button class="nav-item" onclick="showPage('vehicles-page')">
+                <span class="nav-icon"></span>
+                <span class="nav-label">Vehicles</span>
+            </button>
+            <button class="nav-item" onclick="showPage('profile-page')">
+                <span class="nav-icon"></span>
+                <span class="nav-label">Profile</span>
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
