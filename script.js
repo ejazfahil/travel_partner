@@ -1,6 +1,7 @@
 // Global variables
 let qrUpdateInterval;
 let currentQRData = '';
+let scannedQRData = null;   // Holds QR data decoded from a user-uploaded image
 
 // Navigation function
 function showPage(pageId) {
@@ -88,7 +89,14 @@ function generateRandomHash(length) {
 function generateQR() {
     const qrContainer = document.getElementById('qr-code');
     if (!qrContainer) return;
-    
+
+    // If we have a user-scanned QR, render it directly - no server call needed
+    if (scannedQRData) {
+        generateClientQR();
+        updateTimeDisplay();
+        return;
+    }
+
     // Try to use server API first, fallback to client-side generation
     fetch('/api/qr')
         .then(response => response.json())
@@ -115,7 +123,8 @@ function generateClientQR() {
     const qrContainer = document.getElementById('qr-code');
     if (!qrContainer) return;
     
-    currentQRData = generateQRData();
+    // Use scanned data from uploaded image if available, otherwise generate fresh data
+    currentQRData = scannedQRData || generateQRData();
     
     try {
         // Create QR code using qrcode-generator library
@@ -261,6 +270,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize section states
     initializeSections();
     
+    // Wire up the hidden file input for the (+) ticket upload button
+    const ticketImageInput = document.getElementById("ticket-image-input");
+    if (ticketImageInput) {
+        ticketImageInput.addEventListener("change", function (e) {
+            const file = e.target.files[0];
+            if (file) handleTicketImageUpload(file);
+        });
+    }
+
     // Add click handlers for all buttons and links
     document.addEventListener('click', function(e) {
         // Handle navigation clicks
@@ -378,4 +396,90 @@ function simulateButtonPress(element) {
         element.style.transform = 'scale(1)';
         element.style.opacity = '1';
     }, 150);
+}
+
+// ─── (+) Button: opens the device image picker ───────────────────────────────
+function onTicketAddClick() {
+    var input = document.getElementById('ticket-image-input');
+    if (input) {
+        input.value = '';   // reset so the same file can be re-selected
+        input.click();
+    }
+}
+
+// ─── Handle the selected image file ──────────────────────────────────────────
+function handleTicketImageUpload(file) {
+    showScanModal('scanning');
+
+    var reader = new FileReader();
+    reader.onload = function (e) {
+        var img = new Image();
+        img.onload = function () {
+            // Draw image onto the offscreen canvas
+            var canvas = document.getElementById('qr-scan-canvas');
+            var ctx = canvas.getContext('2d');
+            canvas.width  = img.naturalWidth;
+            canvas.height = img.naturalHeight;
+            ctx.drawImage(img, 0, 0);
+
+            // Extract pixel data and hand to jsQR
+            var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            var result = (typeof jsQR !== 'undefined')
+                ? jsQR(imageData.data, imageData.width, imageData.height,
+                       { inversionAttempts: 'dontInvert' })
+                : null;
+
+            if (result && result.data) {
+                scannedQRData = result.data;
+                showScanModal('success');
+            } else {
+                showScanModal('error');
+            }
+        };
+        img.onerror = function () { showScanModal('error'); };
+        img.src = e.target.result;
+    };
+    reader.onerror = function () { showScanModal('error'); };
+    reader.readAsDataURL(file);
+}
+
+// ─── Show/hide the bottom-sheet scan modal ───────────────────────────────────
+function showScanModal(state) {
+    var overlay  = document.getElementById('scan-modal-overlay');
+    var scanning = document.getElementById('scan-state-scanning');
+    var success  = document.getElementById('scan-state-success');
+    var error    = document.getElementById('scan-state-error');
+    if (!overlay) return;
+
+    // Hide all states first
+    [scanning, success, error].forEach(function (el) {
+        if (el) el.style.display = 'none';
+    });
+
+    overlay.classList.add('open');
+
+    if (state === 'scanning' && scanning) scanning.style.display = 'flex';
+    if (state === 'success'  && success)  success.style.display  = 'flex';
+    if (state === 'error'    && error)    error.style.display    = 'flex';
+}
+
+function closeScanModal() {
+    var overlay = document.getElementById('scan-modal-overlay');
+    if (overlay) overlay.classList.remove('open');
+}
+
+// ─── Navigate to QR page and display the scanned ticket ──────────────────────
+function viewScannedTicket() {
+    closeScanModal();
+    showPage('qr-page');   // generateQR() is called inside showPage -> startQRGeneration
+}
+
+// ─── Retry: re-open the file picker ──────────────────────────────────────────
+function retryImageScan() {
+    closeScanModal();
+    var input = document.getElementById('ticket-image-input');
+    if (input) {
+        input.value = '';
+        input.click();
+    }
 }

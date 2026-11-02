@@ -6,6 +6,8 @@
     <title>Metro Transport</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+    <!-- jsQR: decodes QR codes from uploaded image -->
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 </head>
 <body>
     <div class="phone-container">
@@ -136,6 +138,10 @@
                             <span>Price</span>
                             <span>0,00 €</span>
                         </div>
+                        <div class="ticket-add-row">
+                            <button class="ticket-add-btn" type="button" aria-label="Add"
+                                    onclick="event.stopPropagation(); onTicketAddClick();">+</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -164,15 +170,15 @@
                             <div class="section-content" id="card-info-content">
                                 <div class="card-info-details">
                                     <div class="user-info">
-                                        <img src="https://via.placeholder.com/80x100/cccccc/666666?text=Photo" alt="User Photo" class="user-photo">
+                                        <img src="profile.jpg" alt="Fahil Ejaz" class="user-photo">
                                         <div class="user-details">
-                                            <h4>FAUZAN EJAZ</h4>
-                                            <p class="user-id">JZEFZN99T24Z222G</p>
+                                            <h4>FAHIL EJAZ</h4>
+                                            <p class="user-id">JZEFHL97B03Z222E</p>
                                             <div class="card-details">
                                                 <p><strong>Card no.</strong></p>
                                                 <p>2000695522</p>
                                                 <p><strong>Expiry date:</strong></p>
-                                                <p>31/07/2026</p>
+                                                <p>31/07/2027</p>
                                             </div>
                                         </div>
                                     </div>
@@ -322,10 +328,10 @@
 
                 <div class="profile-info">
                     <div class="profile-avatar">
-                        <img src="https://via.placeholder.com/60" alt="Profile" class="avatar">
+                        <img src="profile.jpg" alt="Fahil Ejaz" class="avatar">
                     </div>
                     <div class="profile-details">
-                        <h3>Fauzan Ejaz</h3>
+                        <h3>Fahil Ejaz</h3>
                         <a href="#" class="edit-profile">Edit profile</a>
                     </div>
                     <div class="qr-icon phone-icon"></div>
@@ -381,6 +387,39 @@
                         <span>Language</span>
                         <span class="arrow">></span>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hidden file input for QR image upload -->
+        <input type="file" id="ticket-image-input" accept="image/*" style="display:none">
+        <!-- Offscreen canvas for QR decoding -->
+        <canvas id="qr-scan-canvas" style="display:none"></canvas>
+
+        <!-- QR Scan Result Bottom Sheet -->
+        <div class="scan-modal-overlay" id="scan-modal-overlay">
+            <div class="scan-modal">
+                <!-- Scanning state -->
+                <div class="scan-modal-state" id="scan-state-scanning">
+                    <div class="scan-spinner"></div>
+                    <p class="scan-modal-title">Scanning image…</p>
+                    <p class="scan-modal-subtitle">Looking for a QR code in your image</p>
+                </div>
+                <!-- Success state -->
+                <div class="scan-modal-state" id="scan-state-success">
+                    <div class="scan-result-icon scan-icon-success">✓</div>
+                    <p class="scan-modal-title">QR code detected!</p>
+                    <p class="scan-modal-subtitle">Your ticket QR code is ready to view</p>
+                    <button class="btn primary scan-action-btn" onclick="viewScannedTicket()">View Ticket</button>
+                    <button class="scan-cancel-btn" onclick="closeScanModal()">Cancel</button>
+                </div>
+                <!-- Error state -->
+                <div class="scan-modal-state" id="scan-state-error">
+                    <div class="scan-result-icon scan-icon-error">✕</div>
+                    <p class="scan-modal-title">No QR code found</p>
+                    <p class="scan-modal-subtitle">Make sure the image contains a clear, unobstructed QR code</p>
+                    <button class="btn primary scan-action-btn" onclick="retryImageScan()">Try Again</button>
+                    <button class="scan-cancel-btn" onclick="closeScanModal()">Cancel</button>
                 </div>
             </div>
         </div>
